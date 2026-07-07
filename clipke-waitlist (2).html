@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClipKe — Join the creator waitlist</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lime:#0B7A3E; --lime-dim:#086530; --lime-bg:rgba(11,122,62,0.08);
+  --gold-bright:#E0A83B;
+  --text:#15191A; --text-2:#5B645F; --text-3:#6E7973;
+  --border:#E8E5DC;
+  --red:#D8473A;
+  --font:'Space Grotesk',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --stage-bg:#0E1210;
+}
+html,body{height:100%}
+body{
+  font-family:var(--font);
+  background:radial-gradient(ellipse at top,#1A211D 0%, var(--stage-bg) 62%);
+  color:#F4F2EA;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:48px 18px 60px;
+}
+:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+
+.wrap{width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center}
+.mark{width:40px;height:40px;background:var(--lime);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(11,122,62,.35);margin-bottom:18px}
+.mark svg{width:21px;height:21px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--gold-bright);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;text-align:center}
+h1{font-size:clamp(26px,5.5vw,32px);font-weight:700;letter-spacing:-.02em;line-height:1.15;text-align:center;color:#F4F2EA}
+.lede{font-size:15px;color:#9BA39D;text-align:center;margin-top:14px;line-height:1.55;max-width:400px}
+
+/* ── LIVE COUNT ── */
+.live-count{display:flex;align-items:center;gap:8px;margin-top:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:9px 16px;border-radius:999px;font-size:13px;color:#E7E4DA}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 rgba(11,122,62,.6);animation:pulse 1.8s infinite}
+.live-count strong{color:#fff;font-family:var(--mono);font-variant-numeric:tabular-nums}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(11,122,62,.55)}
+  70%{box-shadow:0 0 0 8px rgba(11,122,62,0)}
+  100%{box-shadow:0 0 0 0 rgba(11,122,62,0)}
+}
+
+/* ── CARD ── */
+.card{width:100%;margin-top:22px;background:#fff;color:var(--text);border-radius:18px;box-shadow:0 40px 90px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);position:relative;overflow:hidden}
+.panel{padding:26px 24px 24px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11.5px;font-weight:600;color:var(--text-2);margin-bottom:6px}
+.field input{width:100%;height:42px;border:1px solid var(--border);border-radius:9px;padding:0 13px;font-size:14px;font-family:var(--font);color:var(--text);background:#fff;transition:border-color .15s}
+.field input:focus{border-color:var(--lime)}
+.field-err{font-size:11px;color:var(--red);margin-top:5px;display:none}
+.field.invalid input{border-color:var(--red)}
+.field.invalid .field-err{display:block}
+
+.check-field{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;padding:12px 13px;border:1px solid var(--border);border-radius:9px;transition:border-color .15s}
+.check-field.invalid{border-color:var(--red)}
+.check-field input[type="checkbox"]{width:18px;height:18px;margin-top:1px;accent-color:var(--lime);flex-shrink:0;cursor:pointer}
+.check-field label{font-size:12.5px;color:var(--text-2);line-height:1.5;cursor:pointer}
+.check-field .field-err{margin-top:6px}
+
+.submit-btn{width:100%;height:46px;border-radius:10px;background:var(--lime);color:#fff;font-size:14.5px;font-weight:700;border:none;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;transition:transform .15s,background .15s}
+.submit-btn:hover{background:var(--lime-dim)}
+.submit-btn:active{transform:scale(.98)}
+.submit-btn:disabled{opacity:.6;cursor:default;transform:none}
+.spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.submit-btn.loading .spinner{display:block}
+.submit-btn.loading .btn-txt{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.fineprint{font-size:11px;color:var(--text-3);text-align:center;margin-top:14px;line-height:1.5}
+
+.success{display:none;padding:36px 26px 32px;text-align:center}
+.success.showing{display:block}
+.panel.hidden{display:none}
+.pos-badge{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:var(--lime-bg);margin-bottom:16px;font-size:26px}
+.success-title{font-size:19px;font-weight:700}
+.success-msg{font-size:13.5px;color:var(--text-2);margin-top:10px;line-height:1.6;max-width:320px;margin-left:auto;margin-right:auto}
+.start-over{display:inline-block;margin-top:20px;font-size:12px;color:var(--text-3);text-decoration:underline;cursor:pointer;background:none;border:none;font-family:var(--font)}
+
+.whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;height:46px;border-radius:10px;background:#25D366;color:#fff;font-size:14px;font-weight:700;text-decoration:none;margin-top:22px;transition:background .15s,transform .15s}
+.whatsapp-btn:hover{background:#1FBB59}
+.whatsapp-btn:active{transform:scale(.98)}
+.whatsapp-btn svg{width:18px;height:18px;flex-shrink:0}
+.whatsapp-note{font-size:11.5px;color:var(--text-3);margin-top:10px;line-height:1.5}
+
+.error-banner{display:none;background:#FBE7E5;color:var(--red);font-size:12.5px;padding:10px 13px;border-radius:9px;margin-bottom:14px;text-align:center}
+.error-banner.showing{display:block}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="mark"><svg viewBox="0 0 24 24" fill="#fff"><polygon points="5,2 21,12 5,22"/></svg></div>
+  <div class="eyebrow">Creator early access</div>
+  <h1>Turn your content into income.</h1>
+  <p class="lede">ClipKe matches you with real brand campaigns — post short clips, hit the brief, get paid per verified view straight to M-Pesa. Join the waitlist to get early access.</p>
+
+  <div class="live-count">
+    <span class="live-dot"></span>
+    <span><strong id="liveCountNum">—</strong> creators already joined</span>
+  </div>
+
+  <div class="card">
+    <div class="panel" id="panel">
+      <div class="error-banner" id="errorBanner">Something went wrong saving your spot — please check your connection and try again.</div>
+
+      <form id="waitlistForm">
+        <div class="field" id="f-name">
+          <label>Full name</label>
+          <input type="text" id="inName" autocomplete="name">
+          <div class="field-err">Enter your name.</div>
+        </div>
+
+        <div class="field" id="f-email">
+          <label>Email</label>
+          <input type="email" id="inEmail" autocomplete="email">
+          <div class="field-err">Enter a valid email.</div>
+        </div>
+
+        <div class="field" id="f-phone">
+          <label>Phone (WhatsApp / M-Pesa)</label>
+          <input type="tel" id="inPhone" placeholder="07xx xxx xxx">
+          <div class="field-err">Enter a valid phone number.</div>
+        </div>
+
+        <div class="check-field" id="f-age">
+          <input type="checkbox" id="inAge">
+          <div>
+            <label for="inAge">I confirm I am 18 years of age or older.</label>
+            <div class="field-err">You must be 18 or older to join.</div>
+          </div>
+        </div>
+
+        <button class="submit-btn" type="submit" id="submitBtn">
+          <span class="spinner"></span>
+          <span class="btn-txt" id="submitTxt">Join the waitlist →</span>
+        </button>
+      </form>
+
+      <p class="fineprint">No spam. We'll only reach out when it's your turn to get access.</p>
+    </div>
+
+    <div class="success" id="successPanel">
+      <div class="pos-badge">🎉</div>
+      <div class="success-title">You're on the list</div>
+      <p class="success-msg" id="successMsg"></p>
+
+      <a class="whatsapp-btn" href="https://chat.whatsapp.com/BmBL5dMP2b2C33ApyFUqjI" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.97-.93-.26-.1-.46-.15-.65.15-.2.29-.75.93-.92 1.12-.17.2-.34.22-.63.08-.29-.15-1.22-.45-2.32-1.44-.86-.76-1.44-1.7-1.6-1.99-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.5.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.08-.15-.65-1.58-.9-2.16-.24-.58-.48-.5-.65-.5-.17-.01-.36-.01-.56-.01-.2 0-.52.07-.79.37-.27.29-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.35.2 1.86.12.57-.08 1.7-.7 1.94-1.37.24-.68.24-1.26.17-1.38-.07-.12-.26-.2-.55-.34z"/><path d="M12.02 2C6.5 2 2.02 6.48 2.02 12c0 1.85.5 3.58 1.36 5.07L2 22l5.08-1.33A9.95 9.95 0 0 0 12.02 22c5.52 0 10-4.48 10-10S17.54 2 12.02 2zm0 18.2c-1.62 0-3.14-.44-4.44-1.2l-.32-.19-3.29.86.88-3.21-.21-.33A8.18 8.18 0 0 1 3.82 12c0-4.53 3.68-8.2 8.2-8.2 4.53 0 8.2 3.67 8.2 8.2 0 4.53-3.67 8.2-8.2 8.2z"/></svg>
+        Join the WhatsApp community
+      </a>
+      <p class="whatsapp-note">Get in now for early updates from the team — once ClipKe is live, we'll also notify you by email and SMS.</p>
+
+      <button class="start-over" id="startOverBtn" type="button">Sign up a different person</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   SETUP — connect this form to a Google Sheet
+   ──────────────────────────────────────────────────────────────────
+   1. Create a Google Sheet. Add a header row exactly:
+      Timestamp | Name | Email | Phone
+   2. In the Sheet: Extensions → Apps Script. Delete any starter code
+      and paste this, then save:
+
+        function doPost(e) {
+          var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+          var p = e.parameter;
+          sheet.appendRow([
+            new Date(),
+            p.name  || '',
+            p.email || '',
+            p.phone || ''
+          ]);
+          return ContentService.createTextOutput(
+            JSON.stringify({ result: 'success' })
+          ).setMimeType(ContentService.MimeType.JSON);
+        }
+
+        function doGet(e) {
+          var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+          var count = Math.max(sheet.getLastRow() - 1, 0);
+          return ContentService.createTextOutput(
+            JSON.stringify({ count: count })
+          ).setMimeType(ContentService.MimeType.JSON);
+        }
+
+   3. Click Deploy → New deployment → type "Web app".
+      - Execute as: Me
+      - Who has access: Anyone
+      Click Deploy, authorize it, then copy the Web app URL.
+   4. Paste that URL below as GOOGLE_SHEET_URL.
+   ══════════════════════════════════════════════════════════════════ */
+const GOOGLE_SHEET_URL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+const el = id => document.getElementById(id);
+const form = el('waitlistForm');
+const submitBtn = el('submitBtn');
+const panel = el('panel'), successPanel = el('successPanel');
+const errorBanner = el('errorBanner');
+const liveCountNum = el('liveCountNum');
+const isConfigured = GOOGLE_SHEET_URL.startsWith('http');
+
+let lastKnownCount = null;
+
+function setCountDisplay(n){
+  lastKnownCount = n;
+  liveCountNum.textContent = n.toLocaleString();
+}
+
+async function fetchLiveCount(){
+  if(!isConfigured) return;
+  try{
+    const res = await fetch(GOOGLE_SHEET_URL + '?t=' + Date.now());
+    const data = await res.json();
+    if(typeof data.count === 'number'){
+      setCountDisplay(data.count);
+      try{ await window.storage.set('waitlist:count-cache', String(data.count), false); }catch(e){}
+    }
+  }catch(e){
+    // Network hiccup or not configured yet — keep showing the last known value.
+  }
+}
+
+async function restoreCachedCount(){
+  try{
+    const res = await window.storage.get('waitlist:count-cache', false);
+    if(res && res.value) setCountDisplay(parseInt(res.value, 10));
+  }catch(e){}
+}
+
+function validate(){
+  let ok = true;
+  const name = el('inName').value.trim();
+  const email = el('inEmail').value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const phone = el('inPhone').value.trim();
+  const phoneOk = /^(\+?254|0)[17]\d{8}$/.test(phone.replace(/\s+/g,''));
+  const ageOk = el('inAge').checked;
+
+  el('f-name').classList.toggle('invalid', !name); if(!name) ok=false;
+  el('f-email').classList.toggle('invalid', !emailOk); if(!emailOk) ok=false;
+  el('f-phone').classList.toggle('invalid', !phoneOk); if(!phoneOk) ok=false;
+  el('f-age').classList.toggle('invalid', !ageOk); if(!ageOk) ok=false;
+  return ok;
+}
+
+function showSuccess(entry){
+  panel.classList.add('hidden');
+  successPanel.classList.add('showing');
+  el('successMsg').textContent =
+    `We've got you down. Once ClipKe opens up new creator spots, we'll reach out by email and SMS to ${entry.phone}.`;
+}
+
+async function loadExistingSignup(){
+  try{
+    const res = await window.storage.get('waitlist:me', false);
+    const mine = JSON.parse(res.value);
+    showSuccess(mine);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  errorBanner.classList.remove('showing');
+  if(!validate()) return;
+
+  if(!isConfigured){
+    errorBanner.textContent = 'This form is being set up — please check back shortly.';
+    errorBanner.classList.add('showing');
+    return;
+  }
+
+  submitBtn.disabled = true; submitBtn.classList.add('loading');
+
+  const entry = {
+    name: el('inName').value.trim(),
+    email: el('inEmail').value.trim(),
+    phone: el('inPhone').value.trim()
+  };
+
+  try{
+    const body = new URLSearchParams(entry);
+    // Apps Script web apps don't return CORS headers on POST, so this is sent
+    // "fire and forget" — we can't read a response back from no-cors mode.
+    await fetch(GOOGLE_SHEET_URL, { method:'POST', mode:'no-cors', body });
+
+    // Remember locally (private to this browser only) so a revisit
+    // shows the confirmation instead of an empty form again.
+    try{ await window.storage.set('waitlist:me', JSON.stringify(entry), false); }catch(e){}
+
+    // Optimistic bump so the counter feels instant, then reconcile with
+    // the real total on the next poll.
+    if(lastKnownCount !== null) setCountDisplay(lastKnownCount + 1);
+
+    showSuccess(entry);
+    fetchLiveCount();
+  }catch(err){
+    errorBanner.textContent = 'Something went wrong saving your spot — please check your connection and try again.';
+    errorBanner.classList.add('showing');
+  }finally{
+    submitBtn.disabled = false; submitBtn.classList.remove('loading');
+  }
+});
+
+el('startOverBtn').addEventListener('click', async ()=>{
+  try{ await window.storage.delete('waitlist:me', false); }catch(e){}
+  form.reset();
+  successPanel.classList.remove('showing');
+  panel.classList.remove('hidden');
+});
+
+restoreCachedCount();
+loadExistingSignup();
+fetchLiveCount();
+setInterval(fetchLiveCount, 8000);
+</script>
+
+</body>
+</html>
